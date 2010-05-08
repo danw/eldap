@@ -1,0 +1,10 @@
+{application, eldap,
+ [
+  {description, "Erlang LDAP API"},
+  {vsn, "3.0"},
+  {modules, []},
+  {registered, []},
+  {applications, [kernel, stdlib, crypto, inets]},
+  {mod, {eldap_app, []}},
+  {env, []}
+ ]}.
