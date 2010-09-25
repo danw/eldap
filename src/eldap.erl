@@ -378,32 +378,50 @@ loop(Cpid, Data) ->
 	{From, {search, A}} ->
 	    {Res,NewData} = do_search(Data, A),
 	    send(From,Res),
-	    loop(Cpid, NewData);
+		case Res of
+			{error, ldap_closed} -> exit(ldap_closed);
+			_ -> loop(Cpid, NewData)
+		end;
 
 	{From, {modify, Obj, Mod}} ->
 	    {Res,NewData} = do_modify(Data, Obj, Mod),
 	    send(From,Res),
-	    loop(Cpid, NewData);
+		case Res of
+			{error, ldap_closed} -> exit(ldap_closed);
+			_ -> loop(Cpid, NewData)
+		end;
 
 	{From, {modify_dn, Obj, NewRDN, DelOldRDN, NewSup}} ->
 	    {Res,NewData} = do_modify_dn(Data, Obj, NewRDN, DelOldRDN, NewSup),
 	    send(From,Res),
-	    loop(Cpid, NewData);
+		case Res of
+			{error, ldap_closed} -> exit(ldap_closed);
+			_ -> loop(Cpid, NewData)
+		end;
 
 	{From, {add, Entry, Attrs}} ->
 	    {Res,NewData} = do_add(Data, Entry, Attrs),
 	    send(From,Res),
-	    loop(Cpid, NewData);
+		case Res of
+			{error, ldap_closed} -> exit(ldap_closed);
+			_ -> loop(Cpid, NewData)
+		end;
 
 	{From, {delete, Entry}} ->
 	    {Res,NewData} = do_delete(Data, Entry),
 	    send(From,Res),
-	    loop(Cpid, NewData);
+		case Res of
+			{error, ldap_closed} -> exit(ldap_closed);
+			_ -> loop(Cpid, NewData)
+		end;
 
 	{From, {simple_bind, Dn, Passwd}} ->
 	    {Res,NewData} = do_simple_bind(Data, Dn, Passwd),
 	    send(From,Res),
-	    loop(Cpid, NewData);
+		case Res of
+			{error, ldap_closed} -> exit(ldap_closed);
+			_ -> loop(Cpid, NewData)
+		end;
 
 	{From, {cnt_proc, NewCpid}} ->
 	    unlink(Cpid),
